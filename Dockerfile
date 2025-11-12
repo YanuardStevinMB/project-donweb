@@ -6,16 +6,19 @@ FROM gradle:8.6-jdk21 AS builder
 WORKDIR /home/gradle/project
 
 # Copy the whole project and build the module's bootJar (skip tests for speed)
+# Use the Gradle wrapper present in the repo for reproducible builds
 COPY --chown=gradle:gradle . .
+# Build the application using the container-provided gradle (wrapper may not be executable on Windows)
 RUN gradle :app-service:bootJar -x test --no-daemon
 
 # Collect the built jar into a known path
 RUN mkdir -p /build-output \
  && cp applications/app-service/build/libs/*.jar /build-output/app.jar
 
-FROM eclipse-temurin:21-jre AS runtime
+FROM eclipse-temurin:21-jre-jammy AS runtime
 LABEL maintainer="team"
-ENV JAVA_OPTS="-XX:+UseContainerSupport -XX:MaxRAMPercentage=70 -Djava.security.egd=file:/dev/./urandom"
+# JVM tuned for low-memory (1GB) servers: small heap and limit processors
+ENV JAVA_OPTS="-Xms128m -Xmx512m -XX:ActiveProcessorCount=1 -XX:+UseContainerSupport -Djava.security.egd=file:/dev/./urandom"
 EXPOSE 8081
 VOLUME /tmp
 
