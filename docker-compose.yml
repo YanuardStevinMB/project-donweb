@@ -1,0 +1,16 @@
+﻿version: '3.8'
+
+services:
+  iam-app:
+    build: .
+    container_name: crediya-iam-service
+    ports:
+      - "8081:8081"
+    environment:
+      SPRING_PROFILES_ACTIVE: "local"
+      ADAPTERS_R2DBC_HOST: "db-mysql-iam.ctgsccwg4xn2.us-east-2.rds.amazonaws.com"
+      ADAPTERS_R2DBC_PORT: "3306"
+      ADAPTERS_R2DBC_DATABASE: "appdb"
+      ADAPTERS_R2DBC_USERNAME: "admin"
+      ADAPTERS_R2DBC_PASSWORD: "MiPassw0rd#2025"
+    restart: unless-stopped

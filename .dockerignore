@@ -1,0 +1,22 @@
+.gradle
+build
+**/build
+**/.gradle
+
+# Local IDE and VCS
+.idea
+.vscode
+*.iml
+.git
+.gitignore
+
+# OS
+.DS_Store
+Thumbs.db
+
+# Logs
+logs
+*.log
+
+# Docker
+**/Dockerfile

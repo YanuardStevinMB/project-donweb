@@ -1,0 +1,36 @@
+spring:
+
+  h2:
+    console:
+      enabled: true
+      path: "/h2"
+
+
+  liquibase:
+    enabled: true
+    driver-class-name: com.mysql.cj.jdbc.Driver
+    change-log: "classpath:db/changelog/db.changelog-master.yaml"
+    # Liquibase usará su propio DataSource JDBC si se provee esta URL (el proyecto usa R2DBC para runtime)
+    url: "jdbc:mysql://${adapters.r2dbc.host}:${adapters.r2dbc.port}/${adapters.r2dbc.database}?useUnicode=true&allowPublicKeyRetrieval=true&useSSL=false"
+    user: "${adapters.r2dbc.username}"
+    password: "${adapters.r2dbc.password}"
+
+
+adapters:
+  r2dbc:
+    host: "db-mysql-iam.ctgsccwg4xn2.us-east-2.rds.amazonaws.com"
+    port: 3306
+    database: "appdb"
+    username: "admin"
+    password: "MiPassw0rd#2025"
+
+
+security:
+  jwt:
+    secret: "QnE1T2lXbVRhV3RzR2VOUXlHaFZ2d2dyU2p2a1R2TnM="
+    expiration-sec: 3600
+    issuer: "autenticacion-service"
+    issuer-uri: ""
+
+cors:
+  allowed-origins: "http://localhost:4200,http://localhost:8080"
